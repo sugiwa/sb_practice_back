@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
+
 public class UserController {
 	
 	@Autowired
@@ -23,6 +26,19 @@ public class UserController {
 		dataList = repository.findAll();
 		
 		return dataList;
+	}
+	
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	public String createUser(UserForm form) {
+		User user = new User();
+		user.setId(form.getId());
+		user.setEmail(form.getEmail());
+		user.setName(form.getName());
+		user.setPassword(form.getPassword());
+		
+		repository.save(user);
+		
+		return "redirect:/return_db_data";
 	}
 	
 	
